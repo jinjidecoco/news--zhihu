@@ -17,11 +17,28 @@ const actions={
 	    		commit('pushNews', res.stories);
 	    	})
 	},
-	updateNew({commit}){
-		zhihu.getNews(res =>{
-			commit('updateNews',res.data);
-		})
-	}
+	// updateNew({commit}){
+	// 	zhihu.getNews(res =>{
+	// 		commit('updateNews',res.stories);
+	// 	})
+	// },
+	getLastNew({commit}){
+        return zhihu.getMoreNews({})
+           .then(res =>{
+           	// console.log(res);
+        	commit('pushNews',res.stories);
+        })
+         	// .then(res=>{
+         	// 	commit('pushNews',res.stories);
+         	// })
+         	// .then(res=>{
+         	// 	commit('updateNews',res.stories);
+         	// })
+         	
+
+    }
+		
+	
 }
 
 const mutations ={
@@ -32,8 +49,7 @@ const mutations ={
 	},
 	updateNews(state,lists){
 		state.lists=lists;
-	}
-	
+	}	
 }
 
 

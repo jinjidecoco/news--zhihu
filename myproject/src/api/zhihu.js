@@ -4,8 +4,13 @@ export  default {
 	getNews(param){
 	  	return axios.get('api/news/latest',{params:param})
 	  		.then(res=>{
-		     	// cb(res.data)
 		     	return res.data;
-		    })
+	    })
+	},
+	getMoreNews(param){
+		return axios.get('api/news/before/'+ 20170523)
+		    .then(res=>{
+			return res.data
+		})
 	}
 }
