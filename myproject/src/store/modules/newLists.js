@@ -1,5 +1,7 @@
 import zhihu from '../../api/zhihu'
 import * as types from '../mutation-types'
+import axios from 'axios';
+
 
 const namespaced = true;
 
@@ -11,34 +13,38 @@ const getters={
 }
 
 const actions={
+
 	pushNew({commit}){
 	    return zhihu.getNews({})
 	    	.then(res=>{
 	    		commit('pushNews', res.stories);
 	    	})
 	},
-	// updateNew({commit}){
-	// 	zhihu.getNews(res =>{
-	// 		commit('updateNews',res.stories);
-	// 	})
-	// },
-	getLastNew({commit}){
-        return zhihu.getMoreNews({})
-           .then(res =>{
-           	// console.log(res);
-        	commit('pushNews',res.stories);
-        })
-         	// .then(res=>{
-         	// 	commit('pushNews',res.stories);
-         	// })
-         	// .then(res=>{
-         	// 	commit('updateNews',res.stories);
-         	// })
-         	
+	updateNew({commit}){
+		 return zhihu.getNews({})
+	    	.then(res=>{
+	    		commit('updateNews', res.stories);
+	    	})
 
-    }
-		
-	
+	},
+	getLastNew({commit}, date ){
+	    axios.get('api/news/before/'+ date )
+	    .then(res =>{
+             commit('pushNews',res.data.stories)
+	    })
+    },
+    // checkMore({commit}){
+    // 	return zhihu.checkDetails({})
+    // 	.then(res=>{
+    // 		commit('check',res.id)
+    // 	})
+    // },
+    getDetail({commit}){
+    	return zhuhu.checkDetails({id})
+    	.then(res=>{
+    		commit('getDetail',res.body)
+    	})
+    }	
 }
 
 const mutations ={
@@ -49,7 +55,15 @@ const mutations ={
 	},
 	updateNews(state,lists){
 		state.lists=lists;
-	}	
+	},	
+	checkMores(){
+
+	},
+	getDate(state,lists){
+		lists.forEach(function(list){
+			let d=list.date;
+		});
+	}
 }
 
 

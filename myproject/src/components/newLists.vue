@@ -2,29 +2,31 @@
 	<div class='new-list'>
 	<ul>
 		<li v-for='list in lists'>
-			<span>{{list.title}}</span>
-			<span>{{list.date}}</span>
-
-			<div>
-				<img :src='list.images[0]|proxyImg'>
-			</div>
-			<span>{{list.date}}</span>
+		   <router-link :to="{ path:'/newDetail/'+ list.id }">
+				<span>{{list.title}}</span>
+				<span>{{list.date}}</span>
+				<div>
+					<img :src='list.images[0]|proxyImg'>
+				</div>
+				<span>{{list.date}}</span>
+		   </router-link>	
 		</li>
 	<!-- 	<button @click='pushNew'>13</button>
-		<button @click='updateNew'>14</button>
+		    <button @click='updateNew'>14</button>
  -->	</ul>
 	
  	</div>
 </template>
 <script >
 import {mapGetters,mapActions,mapMutations} from 'vuex';
-import axios from 'axios';
+
 	export default{
 		name: 'newLists',        
 		data(){
 			return{
-			
-		    };
+			   date:''
+			   // isFlag:
+		    }
         },
         computed:{
         	...mapGetters({
@@ -61,23 +63,36 @@ import axios from 'axios';
 	            function getContentHeight(){  
                  return Math.max(document.body.scrollHeight,document.documentElement.scrollHeight);  
                 }
-                function getDate(){
-                	var d=new Date();
-
-                }
-
 	            let viewHeight=getClientHeight(),
 	                topHeight=getScrollTop(),
 	                contentHeight=getContentHeight(),
 	                bottomHeight=contentHeight-topHeight-viewHeight;
 	                if(bottomHeight<100){
-	                	this.getLastNew();
+	                	this.reduceDate();
+	                	this.getLastNew(this.date);
 	                }
-	        }    
+	        },
+	        initialDate(){
+	        	this.d=new Date();
+	        },
+	        gotDate(){
+
+	         let year=this.d.getFullYear(),
+	             month=this.d.getMonth() + 1,
+	             day=this.d.getDate();
+	             month=month<10 ? '0' + month: month;
+	             day=day<10 ? '0' + day:day;
+                 this.date=year + month + day;
+	        },
+	        reduceDate(){
+	        	this.d.setDate(this.d.getDate()-1);
+                this.gotDate();
+	        }
         },
         created(){
         	this.pushNew(),
-        	this.updateNew();
+        	// this.updateNew();
+        	this.initialDate();
             window.addEventListener('scroll',this.handleScroll)
 
         },
